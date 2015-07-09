@@ -1,0 +1,108 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Project Page</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
+    <style>
+      .modal {
+        width: 600px;
+        height: 600px;
+        background-color: #eee;
+        padding: 1em;
+        /*display: none;*/
+      }
+      .show-modal {
+        display: block;
+      }
+      input, textarea {
+        width: 100%;
+        /*padding: 1em;*/
+        margin-bottom: 1em;
+      }
+
+    </style>
+  </head>
+  <body>
+    <script type="text/jsx">
+
+      var ProjectPage = React.createClass({
+        getInitialState: function() {
+          return {
+            modalIsOpen: false
+          };
+        },
+        openModal: function(){
+          this.setState({modalIsOpen: true});
+        },
+        closeModal: function(){
+          this.setState({modalIsOpen: false});
+        },
+        render: function(){
+          var modal = this.state.modalIsOpen ? <Modal handleClose={this.closeModal}><NewProjectForm /></Modal> : null;
+          return (
+            <div>
+              <h1>This is the project page</h1>
+              <button onClick={this.openModal}>New Project</button>
+              {modal}
+            </div>
+          );
+        }
+      });
+
+      var Modal = React.createClass({
+        render: function(){
+          return (
+            <div className="modal">
+              <h3>My Modal</h3>
+              {this.props.children}
+              <button onClick={this.props.handleClose}>Close modal</button>
+            </div>
+          );
+        }
+      });
+
+      var NewProjectForm = React.createClass({
+        render: function(){
+          return (
+            <form>
+              <input type="text" placeholder="Project name"/>
+              <textarea placeholder="Project notes"/>
+              <input type="submit" value="submit"/>
+            </form>
+          );
+        }
+      });
+
+      var NewRunForm = React.createClass({
+        render: function(){
+          return (
+            <form>
+              <input type="text" placeholder="Run name"/>
+              <textarea placeholder="Run notes"/>
+              <input type="submit" value="submit"/>
+            </form>
+          );
+        }
+      });
+
+      var NewBAMForm = React.createClass({
+        render: function(){
+          return (
+            <form>
+              <input type="text" placeholder="BAM name"/>
+              <textarea placeholder="BAM notes"/>
+              <input type="submit" value="submit"/>
+            </form>
+          );
+        }
+      });
+
+      React.render(<ProjectPage />, document.body);
+
+    </script>
+  </body>
+</html>
