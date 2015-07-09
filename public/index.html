@@ -28,7 +28,6 @@
   </head>
   <body>
     <script type="text/jsx">
-    
       var ModalStates = {
         NONE: 0,
         PROJECT: 1,
@@ -78,6 +77,26 @@
               {modal}
             </div>
           );
+        },
+        componentDidUpdate: function(prevProps, prevState) {
+          var prevModal = prevState.modal,
+              newModal = this.state.modal;
+          if (prevModal == newModal) return;
+
+          if (prevModal == ModalStates.NONE) {
+            console.log('would call .modal()');
+            $(this.getDOMNode()).find('.modal').modal();
+          }
+        },
+        componentWillUpdate: function(nextProps, nextState) {
+          var newModal = nextState.modal,
+              prevModal = this.state.modal;
+          if (prevModal == newModal) return;
+
+          if (newModal == ModalStates.NONE) {
+            console.log('would call .close()')
+            $(this.getDOMNode()).find('.modal').hide();
+          }
         }
       });
 
