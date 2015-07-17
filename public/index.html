@@ -76,37 +76,23 @@
               {modal}
             </div>
           );
-        },
-        componentDidUpdate: function(prevProps, prevState) {
-          var prevModal = prevState.modal,
-              newModal = this.state.modal;
-          if (prevModal == newModal) return;
-
-          if (prevModal == ModalStates.NONE) {
-            $(this.getDOMNode()).find('.modal').modal('show');
-          }
-        },
-        componentWillUpdate: function(nextProps, nextState) {
-          var newModal = nextState.modal,
-              prevModal = this.state.modal;
-          if (prevModal == newModal) return;
-
-          if (newModal == ModalStates.NONE) {
-            $(this.getDOMNode()).find('.modal').modal('hide');
-          }
         }
       });
 
       var Modal = React.createClass({
         componentDidMount: function() {
+          $('.modal').modal('show');
           $('.modal').on('hidden.bs.modal', () => {this.props.handleClose()});
+        },
+        hideModal: function() {
+          $('.modal').modal('hide');
         },
         render: function(){
           return (
             <div className="modal fade" role="dialog" tabIndex="-1">
               <div className="modal-dialog" role="document">
                 {this.props.children}
-                <button onClick={this.props.handleClose}>Close modal</button>
+                <button onClick={this.hideModal}>Close modal</button>
               </div>
             </div>
           );
