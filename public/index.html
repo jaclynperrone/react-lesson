@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Project Page</title>
+    <title>Tweet Box</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -13,130 +13,72 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <style>
-      .modal-dialog {
-        background-color: #fff;
-      }
-      input, textarea {
-        width: 100%;
-        padding: 1em;
-        margin-bottom: 1em;
-      }
-    </style>
-  </head>
-  <body>
     <script type="text/jsx;harmony=true">
-      var ModalStates = {
-        NONE: 0,
-        PROJECT: 1,
-        RUN: 2,
-        BAM: 3
-      };
 
-      var ProjectPage = React.createClass({
+      var TweetBox = React.createClass({
         getInitialState: function() {
           return {
-            modal: ModalStates.NONE
+            text:"",
+            photoAdded: false
           };
         },
-        closeModal: function(){
-          this.setState({modal: ModalStates.NONE});
+        handleChange: function(event) {
+          this.setState({ text: event.target.value });
         },
-        showProjectModal: function(){
-          this.setState({modal: ModalStates.PROJECT});
+        togglePhoto: function(event) {
+          this.setState({photoAdded: !this.state.photoAdded});
         },
-        showRunModal: function(){
-          this.setState({modal: ModalStates.RUN});
-        },
-        showBAMModal: function(){
-          this.setState({modal: ModalStates.BAM});
-        },
-        render: function(){
-          var modal;
-          if (this.state.modal === ModalStates.NONE) {
-            modal = null;
+        remainingCharacters: function() {
+          if (this.state.photoAdded) {
+            return 140 - 23 - this.state.text.length;
           } else {
-              var form;
-              if (this.state.modal === ModalStates.PROJECT) {
-                form = <NewProjectForm />;
-              } else if (this.state.modal === ModalStates.RUN) {
-                form = <NewRunForm />;
-              } else {
-                form = <NewBAMForm />;
-              }
-            modal = <Modal handleClose={this.closeModal}>{form}</Modal>
+            return 140 - this.state.text.length;
           }
-
+        },
+        overflowAlert: function() {
+          if (this.remainingCharacters() < 0) {
+            if (this.state.photoAdded) {
+              var beforeOverflowText = this.state.text.substring(140 - 23 - 10, 140 - 23);
+              var overflowText = this.state.text.substring(140 - 23);
+            } else {
+              var beforeOverflowText = this.state.text.substring(140 - 10, 140);
+              var overflowText = this.state.text.substring(140);  
+            }
+            return (
+                <div className="alert alert-warning">
+                  <strong>Oops! Too Long:</strong>
+                  &nbsp;...{beforeOverflowText}
+                  <strong className="bg-danger">{overflowText}</strong>
+                </div>
+            );
+          } else {
+            return "";
+          }
+        },
+        render: function(){
           return (
-            <div>
-              <h1>This is the project page</h1>
-              <button onClick={this.showProjectModal}>New Project</button>
-              <button onClick={this.showRunModal}>Add Run</button>
-              <button onClick={this.showBAMModal}>Add BAM</button>
-              {modal}
+            <div className="well clearfix">
+              {this.overflowAlert()}
+              <textarea className="form-control" onChange={this.handleChange}></textarea>
+
+              <span>{this.remainingCharacters()}</span>
+
+              <button className="btn btn-primary pull-right" disabled={this.state.text.length === 0 && !this.state.photoAdded}>Tweet</button>
+
+              <button onClick={this.togglePhoto} className="btn btn-default pull-right">{this.state.photoAdded ? "✓ Photo Added" : "Add Photo"}</button>
             </div>
           );
         }
       });
 
-      var Modal = React.createClass({
-        componentDidMount: function() {
-          $('.modal').modal('show');
-          $('.modal').on('hidden.bs.modal', () => {this.props.handleClose()});
-        },
-        hideModal: function() {
-          $('.modal').modal('hide');
-        },
-        render: function(){
-          return (
-            <div className="modal fade" role="dialog" tabIndex="-1">
-              <div className="modal-dialog" role="document">
-                {this.props.children}
-                <button onClick={this.hideModal}>Close modal</button>
-              </div>
-            </div>
-          );
-        }
-      });
-
-      var NewProjectForm = React.createClass({
-        render: function(){
-          return (
-            <form>
-              <input type="text" placeholder="Project name"/>
-              <textarea placeholder="Project notes"/>
-              <input type="submit" value="submit"/>
-            </form>
-          );
-        }
-      });
-
-      var NewRunForm = React.createClass({
-        render: function(){
-          return (
-            <form>
-              <input type="text" placeholder="Run name"/>
-              <textarea placeholder="Run notes"/>
-              <input type="submit" value="submit"/>
-            </form>
-          );
-        }
-      });
-
-      var NewBAMForm = React.createClass({
-        render: function(){
-          return (
-            <form>
-              <input type="text" placeholder="BAM name"/>
-              <textarea placeholder="BAM notes"/>
-              <input type="submit" value="submit"/>
-            </form>
-          );
-        }
-      });
-
-      React.render(<ProjectPage />, document.body);
+      React.render(
+        <TweetBox />,
+        document.body
+      );
 
     </script>
+  </head>
+  <body>
+
   </body>
 </html>
