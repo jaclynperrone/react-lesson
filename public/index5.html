@@ -7,46 +7,72 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <style>
-      .modal {
-        width: 600px;
-        height: 600px;
-        background-color: #eee;
-        padding: 1em;
-        /*display: none;*/
-      }
-      .show-modal {
-        display: block;
+      .modal-dialog {
+        background-color: #fff;
       }
       input, textarea {
         width: 100%;
-        /*padding: 1em;*/
+        padding: 1em;
         margin-bottom: 1em;
       }
-
     </style>
   </head>
   <body>
-    <script type="text/jsx">
+    <script type="text/jsx;harmony=true">
+      var ModalStates = {
+        NONE: 0,
+        PROJECT: 1,
+        RUN: 2,
+        BAM: 3
+      };
 
       var ProjectPage = React.createClass({
         getInitialState: function() {
           return {
-            modalIsOpen: false
+            modal: ModalStates.NONE
           };
         },
-        openModal: function(){
-          this.setState({modalIsOpen: true});
-        },
         closeModal: function(){
-          this.setState({modalIsOpen: false});
+          this.setState({modal: ModalStates.NONE});
+        },
+        showProjectModal: function(){
+          this.setState({modal: ModalStates.PROJECT});
+        },
+        showRunModal: function(){
+          this.setState({modal: ModalStates.RUN});
+        },
+        showBAMModal: function(){
+          this.setState({modal: ModalStates.BAM});
         },
         render: function(){
-          var modal = this.state.modalIsOpen ? <Modal handleClose={this.closeModal}><NewProjectForm /></Modal> : null;
+          var modal;
+          if (this.state.modal === ModalStates.NONE) {
+            modal = null;
+          } else {
+              var form;
+              if (this.state.modal === ModalStates.PROJECT) {
+                form = <NewProjectForm />;
+              } else if (this.state.modal === ModalStates.RUN) {
+                form = <NewRunForm />;
+              } else {
+                form = <NewBAMForm />;
+              }
+            modal = <Modal handleClose={this.closeModal}>{form}</Modal>
+          }
+
           return (
             <div>
               <h1>This is the project page</h1>
-              <button onClick={this.openModal}>New Project</button>
+              <button onClick={this.showProjectModal}>New Project</button>
+              <button onClick={this.showRunModal}>Add Run</button>
+              <button onClick={this.showBAMModal}>Add BAM</button>
               {modal}
             </div>
           );
@@ -54,12 +80,20 @@
       });
 
       var Modal = React.createClass({
+        componentDidMount: function() {
+          $('.modal').modal('show');
+          $('.modal').on('hidden.bs.modal', () => {this.props.handleClose()});
+        },
+        hideModal: function() {
+          $('.modal').modal('hide');
+        },
         render: function(){
           return (
-            <div className="modal">
-              <h3>My Modal</h3>
-              {this.props.children}
-              <button onClick={this.props.handleClose}>Close modal</button>
+            <div className="modal fade" role="dialog" tabIndex="-1">
+              <div className="modal-dialog" role="document">
+                {this.props.children}
+                <button onClick={this.hideModal}>Close modal</button>
+              </div>
             </div>
           );
         }

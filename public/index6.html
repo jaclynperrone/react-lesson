@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Project Page</title>
+    <title>Tweet Box</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -13,130 +13,201 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <style>
-      .modal-dialog {
-        background-color: #fff;
-      }
-      input, textarea {
-        width: 100%;
-        padding: 1em;
-        margin-bottom: 1em;
-      }
-    </style>
-  </head>
-  <body>
-    <script type="text/jsx;harmony=true">
-      var ModalStates = {
-        NONE: 0,
-        PROJECT: 1,
-        RUN: 2,
-        BAM: 3
-      };
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
-      var ProjectPage = React.createClass({
-        getInitialState: function() {
-          return {
-            modal: ModalStates.NONE
-          };
-        },
-        closeModal: function(){
-          this.setState({modal: ModalStates.NONE});
-        },
-        showProjectModal: function(){
-          this.setState({modal: ModalStates.PROJECT});
-        },
-        showRunModal: function(){
-          this.setState({modal: ModalStates.RUN});
-        },
-        showBAMModal: function(){
-          this.setState({modal: ModalStates.BAM});
+    <script type="text/jsx;harmony=true">
+      "use strict";
+      var Item = React.createClass({
+        toggle: function(){
+          this.props.todo.isComplete = !this.props.todo.isComplete;
+          dispatcher.dispatch({ type: constants.update, content: this.props.todo });
         },
         render: function(){
-          var modal;
-          if (this.state.modal === ModalStates.NONE) {
-            modal = null;
-          } else {
-              var form;
-              if (this.state.modal === ModalStates.PROJECT) {
-                form = <NewProjectForm />;
-              } else if (this.state.modal === ModalStates.RUN) {
-                form = <NewRunForm />;
-              } else {
-                form = <NewBAMForm />;
-              }
-            modal = <Modal handleClose={this.closeModal}>{form}</Modal>
-          }
+          return <li className="list-group-item pointer" onClick={this.toggle}>{this.props.todo.name}</li>;
+        }
+      });
 
-          return (
-            <div>
-              <h1>This is the project page</h1>
-              <button onClick={this.showProjectModal}>New Project</button>
-              <button onClick={this.showRunModal}>Add Run</button>
-              <button onClick={this.showBAMModal}>Add BAM</button>
-              {modal}
-            </div>
-          );
+      var List = React.createClass({
+        renderItems: function() {
+          return _.map(this.props.todos, function(todo){
+            return <Item todo={todo} />;
+          });
+        },
+        render: function(){
+          return <ul className="list-group">
+            {this.renderItems()}
+            </ul>;
         }
       });
 
       var Modal = React.createClass({
-        componentDidMount: function() {
-          $('.modal').modal('show');
-          $('.modal').on('hidden.bs.modal', () => {this.props.handleClose()});
+        getInitialState: function() {
+          return {
+            value: ""
+          };
         },
-        hideModal: function() {
-          $('.modal').modal('hide');
+        componentDidMount: function(){
+          this.$el = $(this.getDOMNode());
+          this.$el.on("hidden.bs.modal", this.reset);
+
+          emitter.on(constants.changed, function(){
+            this.$el.modal("hide");
+          }.bind(this));
+        },
+        componentsWillUnmount: function(){
+          emitter.off(constants.changed);
+        },
+        show: function() {
+          this.$el.modal("show");
+        },
+        reset: function() {
+          this.setState({ value: "" });
+        },
+        save: function() {
+          dispatcher.dispatch({ type: constants.create, content: { name: this.state.value, isComplete: false }});
+        },
+        onChange: function(e){
+          this.setState({ value: e.target.value });
         },
         render: function(){
-          return (
-            <div className="modal fade" role="dialog" tabIndex="-1">
-              <div className="modal-dialog" role="document">
-                {this.props.children}
-                <button onClick={this.hideModal}>Close modal</button>
+          return <div className="modal fade" tabIndex="-1" role="dialog" aria-hidden="true">
+              <div className="modal-dialog modal-sm">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <button type="button" className="close" data-dismiss="modal">
+                      <span aria-hidden="true">x</span>
+                      <span className="sr-only">Close</span>
+                    </button>
+                    <h2 className="modal-title">New task</h2>
+                  </div>
+                  <div className="modal-body">
+                    <input placeholder="Task name..." type="text" value={this.state.value} onChange={this.onChange} />
+                  </div>
+                  <div className="modal-footer">
+                    <div className="row">
+                      <div className="col col-md-12">
+                        <button type="button" className="btn btn-primary pull-right" onClick={this.save}>Save</button>
+                        <button type="button" className="btn btn-default pull-right spacing-right" onClick={this.reset} data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-          );
+            </div>;
         }
       });
 
-      var NewProjectForm = React.createClass({
+      var Store = function(url, constants) {
+        this._url = url;
+        this._collection = [];
+
+        dispatcher.register(function(payload){
+          switch (payload.type) {
+            case constants.all:
+            this._all();
+            break;
+
+            case constants.update:
+            this._update(payload.content);
+            break;
+
+            case constants.create:
+            this._create(payload.content);
+            break;
+          }
+        }.bind(this));
+
+        this._all = function() {
+          $.get(this._url).then(function(data) {
+            this._collection = data;
+            _notify.call(this);
+          }.bind(this));
+        }.bind(this);
+
+        this._update = function(content) {
+          var found = _.find(this._collection, function(x) {
+            return x.id === content.id;
+          });
+          for (var name in found)
+            found[name] = content[name];
+            $.post(this._url, found).then(function(){
+              _notify.call(this);
+            }.bind(this));
+        };
+
+        this._create = function(content){
+          content.id = _.max(this._collection, function(x) {
+            return x.id; }).id + 1;
+          $.post(this._url + "/" + content.id).then(function(){
+            _notify.call(this);
+          });
+        };
+
+        function _notify(){
+          emitter.emit(constants.change, this._collection);
+        }
+      };
+
+      var TodoStore = new Store("todos.json", require("constants").todo);
+
+      var Todo = React.createClass({
+        getInitialState: function() {
+          return {
+            todos: []
+          }
+        },
+        componentWillMount: function() {
+          emitter.on(constants.changed, function(todos){
+            this.setState({ todos: todos });
+          }.bind(this));
+        },
+        componentDidMount: function() {
+          dispatcher.dispatch({ type: constants.all });
+        },
+        componentsWillUnmount: function(){
+          emitter.off(constants.all);
+        },
+        create: function() {
+          this.refs.create.show();
+        },
+        renderList: function(complete) {
+          return <List todos={_.filter(this.state.todos, function(x){
+            return x.isComplete === complete;
+          })} />;
+        },
         render: function(){
-          return (
-            <form>
-              <input type="text" placeholder="Project name"/>
-              <textarea placeholder="Project notes"/>
-              <input type="submit" value="submit"/>
-            </form>
-          );
+          return <div className="container">
+              <div className="row">
+                <div className="col-md-8">
+                  <h1>Todo List</h1>
+                </div>
+                <div className="col-md-4">
+                  <button type="button" className="btn btn-primary pull-right spacing-top" onClick={this.create}>New task</button>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-md-6">
+                  <h2 className="spacing-bottom">Incomplete</h2>
+                  {this.renderList(false)}
+                </div>
+                <div className="col-md-6">
+                  <h2 className="spacing-bottom">Complete</h2>
+                  {this.renderList(true)}
+                </div>
+              </div>
+           
+              <Modal ref="create"/>
+          
+          </div>;
         }
       });
 
-      var NewRunForm = React.createClass({
-        render: function(){
-          return (
-            <form>
-              <input type="text" placeholder="Run name"/>
-              <textarea placeholder="Run notes"/>
-              <input type="submit" value="submit"/>
-            </form>
-          );
-        }
-      });
-
-      var NewBAMForm = React.createClass({
-        render: function(){
-          return (
-            <form>
-              <input type="text" placeholder="BAM name"/>
-              <textarea placeholder="BAM notes"/>
-              <input type="submit" value="submit"/>
-            </form>
-          );
-        }
-      });
-
-      React.render(<ProjectPage />, document.body);
+      React.render(<Todo />, document.body);
 
     </script>
+  </head>
+  <body>
+
   </body>
 </html>
