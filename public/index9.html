@@ -1,0 +1,62 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Navigation</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script type="text/jsx;harmony=true">
+      //http://tutorialzine.com/2014/07/5-practical-examples-for-learning-facebooks-react-framework/
+      var MenuExample = React.createClass({
+        getInitialState: function(){
+          return { focused: 0 };
+        },
+        clicked: function(index){
+        // The click handler will update the state with
+        // the index of the focused menu entry
+          this.setState({ focused: index });
+        },
+        render: function(){
+        // Here we will read the items property, which was passed
+        // as an attribute when the component was created
+          var self = this;
+        // The map method will loop over the array of menu entries,
+        // and will return a new array with <li> elements.
+
+          return(
+            <div>
+              <ul>{ this.props.items.map(function(m, index){
+                var style = '';
+                if (self.state.focused == index){
+                  style = 'focused';
+                }
+                // Notice the use of the bind() method. It makes the
+                // index available to the clicked function:
+                return <li className={style} onClick={self.clicked.bind(self, index)}>{m}</li>;
+                }) }
+              </ul>
+              <p>Selected: {this.props.items[this.state.focused]}</p>
+            </div>
+          );
+        }
+      });
+      // Render the menu component on the page, and pass an array with menu options
+      React.render(
+        <MenuExample items={ ['Home', 'Services', 'About', 'Contact us']} />,
+        document.body
+      );
+
+    </script>
+  </head>
+  <body>
+
+  </body>
+</html>

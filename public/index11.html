@@ -1,0 +1,83 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Order form</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script type="text/jsx;harmony=true">
+    //http://tutorialzine.com/2014/07/5-practical-examples-for-learning-facebooks-react-framework/
+
+
+      var ServiceChooser = React.createClass({
+        getInitialState: function(){
+          return { total: 0 };
+        },
+        addTotal: function(price){
+          this.setState({ total: this.state.total + price });
+        },
+        render: function(){
+          var self = this;
+          var services = this.props.items.map(function(s){
+            // Create a new Service component for each item in the items array.
+            // Notice that I pass the self.addTotal function to the component.
+            return <Service name={s.name} price={s.price} active={s.active} addTotal={self.addTotal} />;
+          });
+          return <div>
+                  <h1>Our services</h1>
+                  <div id="services">
+                    {services}
+                    <p id="total">Total <b>${this.state.total.toFixed(2)}</b></p>
+                  </div>
+                </div>;
+        }
+      });
+
+      var Service = React.createClass({
+        getInitialState: function(){
+          return { active: false };
+        },
+        clickHandler: function(){
+          var active = !this.state.active;
+          this.setState({ active: active });
+          // Notify the ServiceChooser, by calling its addTotal method
+          this.props.addTotal( active ? this.props.price : -this.props.price);
+
+        },
+        render: function(){
+          return <p className={ this.state.active ? 'active' : ''} onClick={this.clickHandler}>
+                  {this.props.name} <b>${this.props.price.toFixed(2)}</b>
+                </p>;
+        }
+      });
+
+      var services = [
+          { name: 'Web Development', price: 300 },
+          { name: 'Design', price: 400 },
+          { name: 'Integration', price: 250 },
+          { name: 'Training', price: 220 }
+      ];
+
+      // Render the ServiceChooser component, and pass the array of services
+
+      React.render(
+        <ServiceChooser items={ services } />,
+        document.body
+      );
+
+
+     
+    </script>
+  </head>
+  <body>
+
+  </body>
+</html>
