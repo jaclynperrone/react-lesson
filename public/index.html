@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Image app with AJAX</title>
+    <title>Sticky header using React</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -13,12 +13,17 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src="scripts/jquery.floatThead.js"></script>
     <style>
       thead {
-    /*    position: fixed;
-        left:0;
-        right:0;*/
         background-color: aliceblue;
+      }
+      .table-wrap {
+        overflow-x: auto;
+        position: relative;
+        margin-bottom: 1.5em;
+        width: 100%;
       }
     </style>
     <script type="text/jsx;harmony=true">
@@ -43,79 +48,187 @@
         }
       });
       var Table = React.createClass({
+        componentDidMount: function(){
+          $('table').floatThead();
+        },
         render: function(){
           return (
-            <table className="table table-striped">
-              <div className="test">
-              <thead>
-                <tr>
-                  <th>header one</th>
-                  <th>header two</th>
-                  <th>header three</th>
-                  <th>header four</th>
-                  <th>header five</th>
-                </tr>
-              </thead>
-              </div>
-              <tbody>
-                <tr>
-                  <td>detail one</td>
-                  <td>detail two</td>
-                  <td>detail three</td>
-                  <td>detail four</td>
-                  <td>detail five</td>
-                </tr>
-                <tr>
-                  <td>detail one</td>
-                  <td>detail two</td>
-                  <td>detail three</td>
-                  <td>detail four</td>
-                  <td>detail five</td>
-                </tr>
-                <tr>
-                  <td>detail one</td>
-                  <td>detail two</td>
-                  <td>detail three</td>
-                  <td>detail four</td>
-                  <td>detail five</td>
-                </tr>
-                <tr>
-                  <td>detail one</td>
-                  <td>detail two</td>
-                  <td>detail three</td>
-                  <td>detail four</td>
-                  <td>detail five</td>
-                </tr>
-                <tr>
-                  <td>detail one</td>
-                  <td>detail two</td>
-                  <td>detail three</td>
-                  <td>detail four</td>
-                  <td>detail five</td>
-                </tr>
-                <tr>
-                  <td>detail one</td>
-                  <td>detail two</td>
-                  <td>detail three</td>
-                  <td>detail four</td>
-                  <td>detail five</td>
-                </tr>
-                <tr>
-                  <td>detail one</td>
-                  <td>detail two</td>
-                  <td>detail three</td>
-                  <td>detail four</td>
-                  <td>detail five</td>
-                </tr>
-                <tr>
-                  <td>detail one</td>
-                  <td>detail two</td>
-                  <td>detail three</td>
-                  <td>detail four</td>
-                  <td>detail five</td>
-                </tr>
-              </tbody> 
-            </table>
+            <div className="table-wrap">
+              <table className="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Mobile</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Mobile</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Mobile</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                  </tr>
+                  <tr>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                  </tr>
+                  <tr>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                  </tr>
+                  <tr>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                  </tr>
+                  <tr>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                  </tr>
+                  <tr>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                  </tr>
+                  <tr>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                  </tr>
+                  <tr>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                  </tr>
+                  <tr>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                  </tr>
+                  <tr>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                  </tr>
+                  <tr>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                    <td>gary coleman</td>
+                    <td>gary.coleman21@example.com</td>
+                    <td>(398)-332-5385</td>
+                    <td>(888)-677-3719</td>
+                  </tr>    
+                </tbody> 
+              </table>
+            </div>
           );
         }
       });
