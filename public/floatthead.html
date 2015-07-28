@@ -1,0 +1,246 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Image app with AJAX</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src="scripts/jquery.floatThead.js"></script>
+    <style>
+    thead {
+      background-color: aliceblue;
+    }
+      .sticky-wrap {
+        overflow-x: auto;
+        position: relative;
+        margin-bottom: 1.5em;
+        width: 100%;
+      }
+      .sticky-wrap .sticky-thead,
+      .sticky-wrap .sticky-col,
+      .sticky-wrap .sticky-intersect {
+          opacity: 0;
+          position: absolute;
+          top: 0;
+          left: 0;
+          transition: all .125s ease-in-out;
+          z-index: 50;
+          width: auto; /* Prevent table from stretching to full size */
+      }
+          .sticky-wrap .sticky-thead {
+              box-shadow: 0 0.25em 0.1em -0.1em rgba(0,0,0,.125);
+              z-index: 100;
+              width: 100%; /* Force stretch */
+          }
+          .sticky-wrap .sticky-intersect {
+              opacity: 1;
+              z-index: 150;
+          }
+          .sticky-wrap .sticky-intersect th {
+              background-color: #666;
+              color: #eee;
+          }
+      .sticky-wrap td,
+      .sticky-wrap th {
+          box-sizing: border-box;
+      }
+      #table {
+        margin: 0;
+        width: 100%;
+      }
+    </style>
+    <script>
+      $(function(){
+        var $table = $('#table');
+        $table.floatThead();
+      });
+    </script>
+  </head>
+  <body>
+    <div class="sticky-wrap">
+      <table id="table" class="table table-striped">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Mobile</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Mobile</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Mobile</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+            </tr>
+            <tr>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+            </tr>
+            <tr>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+            </tr>
+            <tr>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+            </tr>
+            <tr>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+            </tr>
+            <tr>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+            </tr>
+            <tr>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+            </tr>
+            <tr>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+            </tr>
+            <tr>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+            </tr>
+            <tr>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+            </tr>
+            <tr>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+              <td class="user-name">gary coleman</td>
+              <td class="user-email">gary.coleman21@example.com</td>
+              <td class="user-phone">(398)-332-5385</td>
+              <td class="user-mobile">(888)-677-3719</td>
+            </tr>                                        
+          </tbody>
+        </table>
+    </div><!-- sticky wrap -->
+  </body>
+</html>
