@@ -51,6 +51,9 @@
         componentDidMount: function(){
           $('table').floatThead();
         },
+        componentWillUnmount: function(){
+          $('table').floatThead('destroy');
+        },
         render: function(){
           return (
             <div className="table-wrap">
